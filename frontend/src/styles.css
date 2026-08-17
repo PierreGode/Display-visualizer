@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Preview stage: a size container so the bezel frame can be clamped by the
+   available *height* as well as the width (see .preview-frame). */
+.preview-stage {
+  container-type: size;
+}
+
+/* The screen overlay is positioned as a percentage of this box, so the box must
+   keep the bezel image's exact aspect ratio — otherwise the bezel letterboxes
+   inside it and the composited framebuffer lands outside the drawn screen.
+   `max-height` alone can't do that: CSS clamps the height but leaves the
+   declared width, which broke tall panels like the 2.9" e-paper. Preview.tsx
+   overrides `width` with a `cqh`-aware min() that shrinks both axes together;
+   this rule is the fallback for browsers without container query units. */
+.preview-frame {
+  width: min(100%, 640px);
+  max-height: 100%;
+}
+
+.grid-checker {
+  background-image:
+    linear-gradient(45deg, #262626 25%, transparent 25%),
+    linear-gradient(-45deg, #262626 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #262626 75%),
+    linear-gradient(-45deg, transparent 75%, #262626 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+}

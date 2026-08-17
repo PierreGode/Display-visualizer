@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/api.ts","./src/main.tsx","./src/types.ts","./src/components/AssistantPanel.tsx","./src/components/DisplayPicker.tsx","./src/components/Editor.tsx","./src/components/OutputPanel.tsx","./src/components/Preview.tsx","./src/components/UpdateBanner.tsx"],"version":"5.9.3"}

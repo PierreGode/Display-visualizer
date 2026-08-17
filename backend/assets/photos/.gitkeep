@@ -1,0 +1,4 @@
+# Drop {display_id}.jpg / .png / .webp here to override the generated SVG bezel
+# with a real Waveshare product photo. Match the id from displays.json exactly,
+# e.g. `epd2in13_v3.jpg`. Update `screen_bbox` in displays.json to match where
+# the screen sits in your photo (x, y, width, height in the photo's pixel coords).

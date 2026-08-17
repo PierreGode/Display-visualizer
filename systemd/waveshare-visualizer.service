@@ -1,0 +1,22 @@
+[Unit]
+Description=Display Visualizer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=/opt/waveshare-visualizer
+Environment=CLAUDE_PROJECT_DIR=/project
+ExecStart=/opt/waveshare-visualizer/.venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8080
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+ProtectSystem=full
+# read-only (not 'true') so the Claude Code CLI's OAuth session in ~/.claude/ stays readable.
+ProtectHome=read-only
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
