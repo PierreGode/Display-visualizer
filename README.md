@@ -4,6 +4,21 @@ Web-based simulator for [Waveshare](https://www.waveshare.com/product/displays.h
 
 Designed to run on a Raspberry Pi 4/5 on your LAN, but the backend is pure Python and works on any Linux/macOS/Windows machine with Python 3.10+.
 
+## Quickstart on a Raspberry Pi
+
+```bash
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/PierreGode/Display-visualizer/main/install.sh)"
+```
+
+Then open `http://<pi-ip>:8080` from any device on your LAN.
+
+
+<img width="1206" height="2162" alt="image" src="https://github.com/user-attachments/assets/b988ac9f-5f97-4836-92ad-c6b2c1eae283" />
+<img width="1206" height="2161" alt="image" src="https://github.com/user-attachments/assets/f1acf723-6efe-465b-8a0f-5c3e6e917f3b" />
+
+
+
+
 ## Features
 
 - **55+ Waveshare displays** out of the box across e-paper (mono, grayscale, red/black/white, 4-color G, 6/7-color F/E), LCD (ST7789/ILI9341/ILI9486/ST7735S), round LCD (GC9A01/ST7701S/ST77916), and OLED (SSD1306/SH1106/SSD1327/SSD1351/SSD1309).
@@ -17,13 +32,7 @@ Designed to run on a Raspberry Pi 4/5 on your LAN, but the backend is pure Pytho
 - **Sandboxed** — user code runs in a subprocess with a wall-clock timeout, isolated from the backend source.
 - **Bring your own photos** — the shipped bezels are synthesised SVGs, but drop a real product photo into `backend/assets/photos/` and it takes over automatically.
 
-## Quickstart on a Raspberry Pi
 
-```bash
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/PierreGode/Display-visualizer/main/install.sh)"
-```
-
-Then open `http://<pi-ip>:8080` from any device on your LAN.
 
 The installer:
 - installs apt deps and Node.js 20
