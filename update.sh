@@ -4,7 +4,7 @@
 # Runs from the repo root as the service user. Called by the backend when the
 # user clicks "Update" in the UI; can also be invoked directly:
 #
-#   sudo -u pi bash /opt/waveshare-visualizer/update.sh
+#   sudo -u pi bash /opt/display-visualizer/update.sh
 #
 # What it does:
 #   1. git fetch + git reset --hard origin/main
@@ -13,12 +13,12 @@
 #   4. Restarts the systemd unit (requires the sudoers rule installed by
 #      install.sh: `%svc ALL=(root) NOPASSWD: /bin/systemctl restart …`)
 #
-# Any output is captured by the backend into /tmp/waveshare-visualizer-update-*.log.
+# Any output is captured by the backend into /tmp/display-visualizer-update-*.log.
 
 set -euo pipefail
 
 INSTALL_DIR="$(cd "$(dirname "$0")" && pwd)"
-SERVICE_NAME="${SERVICE_NAME:-waveshare-visualizer.service}"
+SERVICE_NAME="${SERVICE_NAME:-display-visualizer.service}"
 
 log() { printf '[update %(%H:%M:%S)T] %s\n' -1 "$*"; }
 

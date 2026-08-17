@@ -7,9 +7,9 @@ Wants=network-online.target
 Type=simple
 User=pi
 Group=pi
-WorkingDirectory=/opt/waveshare-visualizer
+WorkingDirectory=/opt/display-visualizer
 Environment=CLAUDE_PROJECT_DIR=/project
-ExecStart=/opt/waveshare-visualizer/.venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8080
+ExecStart=/opt/display-visualizer/.venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8080
 Restart=on-failure
 RestartSec=3
 NoNewPrivileges=true

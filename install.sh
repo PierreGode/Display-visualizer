@@ -3,21 +3,21 @@
 # Debian Bookworm / Bullseye). Idempotent — safe to re-run to upgrade.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/<you>/waveshare-displays_visualizer/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/PierreGode/Display-visualizer/main/install.sh | bash
 #   # or from a clone:
 #   sudo bash install.sh
 #
 # What it does:
 #   1. Installs apt deps (python3-venv, python3-pip, nodejs 20, git, DejaVu
 #      Sans + Sans Mono fonts used by the sim's text/char-LCD rendering)
-#   2. Clones or updates the repo under /opt/waveshare-visualizer
+#   2. Clones or updates the repo under /opt/display-visualizer
 #   3. Creates a Python venv and installs backend deps
 #   4. Builds the frontend to backend-served static files
 #   5. Installs a systemd unit that runs uvicorn on port 8080
 #
 # Configuration via env vars (all optional):
-#   INSTALL_DIR         default /opt/waveshare-visualizer
-#   REPO_URL            default https://github.com/PierreGode/waveshare-displays_visualizer.git
+#   INSTALL_DIR         default /opt/display-visualizer
+#   REPO_URL            default https://github.com/PierreGode/Display-visualizer.git
 #   REPO_REF            default main
 #   PORT                default 8080
 #   SERVICE_USER        default www-data (or 'pi' if it exists)
@@ -30,8 +30,8 @@
 
 set -euo pipefail
 
-INSTALL_DIR="${INSTALL_DIR:-/opt/waveshare-visualizer}"
-REPO_URL="${REPO_URL:-https://github.com/PierreGode/waveshare-displays_visualizer.git}"
+INSTALL_DIR="${INSTALL_DIR:-/opt/display-visualizer}"
+REPO_URL="${REPO_URL:-https://github.com/PierreGode/Display-visualizer.git}"
 REPO_REF="${REPO_REF:-main}"
 PORT="${PORT:-8080}"
 CLAUDE_PROJECT_DIR="${CLAUDE_PROJECT_DIR:-/project}"
@@ -120,11 +120,11 @@ if [[ -f "${INSTALL_DIR}/update.sh" ]]; then
 fi
 
 log "Installing sudoers rule so the service can restart itself on update…"
-SUDOERS_FILE="/etc/sudoers.d/waveshare-visualizer"
+SUDOERS_FILE="/etc/sudoers.d/display-visualizer"
 cat >"${SUDOERS_FILE}" <<EOF
 # Allow the service user to restart the visualizer without a password. Scoped
 # to exactly this unit — no other systemctl actions permitted.
-${SERVICE_USER} ALL=(root) NOPASSWD: /bin/systemctl restart waveshare-visualizer.service
+${SERVICE_USER} ALL=(root) NOPASSWD: /bin/systemctl restart display-visualizer.service
 EOF
 chmod 0440 "${SUDOERS_FILE}"
 if ! visudo -cf "${SUDOERS_FILE}" >/dev/null; then
@@ -157,11 +157,11 @@ if [[ "${SKIP_CLAUDE}" != "1" ]]; then
     fi
 fi
 
-ENV_FILE="/etc/waveshare-visualizer.env"
+ENV_FILE="/etc/display-visualizer.env"
 if [[ ! -f "${ENV_FILE}" ]]; then
     log "Creating ${ENV_FILE} (edit to point Claude at a project on this Pi)…"
     cat >"${ENV_FILE}" <<ENVEOF
-# Runtime overrides for waveshare-visualizer. Edited values survive reinstalls.
+# Runtime overrides for display-visualizer. Edited values survive reinstalls.
 # Point the in-app Claude agent at a codebase it may read (read-only). It can be
 # any directory the service user can read, including another user's home — the
 # service mounts /home read-only, so reading is allowed. Example:
@@ -172,7 +172,7 @@ ENVEOF
 fi
 
 log "Installing systemd unit…"
-cat >/etc/systemd/system/waveshare-visualizer.service <<EOF
+cat >/etc/systemd/system/display-visualizer.service <<EOF
 [Unit]
 Description=Display Visualizer
 After=network-online.target
@@ -188,7 +188,7 @@ Environment=CLAUDE_CONFIG_DIR=${CLAUDE_CONFIG_DIR}
 # Optional operator overrides (e.g. CLAUDE_PROJECT_DIR); wins over the lines
 # above. Loaded last so edits to the env file take effect without touching this
 # unit. The leading '-' makes it optional.
-EnvironmentFile=-/etc/waveshare-visualizer.env
+EnvironmentFile=-/etc/display-visualizer.env
 ExecStart=${INSTALL_DIR}/.venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port ${PORT}
 Restart=on-failure
 RestartSec=3
@@ -205,10 +205,10 @@ WantedBy=multi-user.target
 EOF
 
 systemctl daemon-reload
-systemctl enable --now waveshare-visualizer.service >/dev/null
+systemctl enable --now display-visualizer.service >/dev/null
 
 sleep 1
-if systemctl is-active --quiet waveshare-visualizer.service; then
+if systemctl is-active --quiet display-visualizer.service; then
     IP=$(hostname -I 2>/dev/null | awk '{print $1}' || echo "<pi-ip>")
     log "Service is up. Open http://${IP}:${PORT} on your LAN."
     if [[ "${SKIP_CLAUDE}" != "1" ]]; then
@@ -216,6 +216,6 @@ if systemctl is-active --quiet waveshare-visualizer.service; then
     fi
 else
     warn "Service failed to start. Diagnostic:"
-    journalctl -u waveshare-visualizer.service --no-pager -n 30 || true
+    journalctl -u display-visualizer.service --no-pager -n 30 || true
     exit 1
 fi

@@ -20,7 +20,7 @@ Designed to run on a Raspberry Pi 4/5 on your LAN, but the backend is pure Pytho
 ## Quickstart on a Raspberry Pi
 
 ```bash
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/PierreGode/waveshare-displays_visualizer/main/install.sh)"
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/PierreGode/Display-visualizer/main/install.sh)"
 ```
 
 Then open `http://<pi-ip>:8080` from any device on your LAN.

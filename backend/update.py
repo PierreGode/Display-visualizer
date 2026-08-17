@@ -161,7 +161,7 @@ def trigger_update() -> dict[str, Any]:
     if not os.access(UPDATE_SCRIPT, os.X_OK):
         return {"ok": False, "error": f"{UPDATE_SCRIPT} not executable"}
 
-    log_path = Path("/tmp") / f"waveshare-visualizer-update-{int(time.time())}.log"
+    log_path = Path("/tmp") / f"display-visualizer-update-{int(time.time())}.log"
     try:
         # Fully detach: new session, new stdio → the child survives this process
         # being killed by systemd during `restart`.
