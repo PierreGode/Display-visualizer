@@ -41,7 +41,7 @@ _PROMPT_HINT = b"Paste code"
 # code is rejected, so we can report a retryable failure instead of hanging.
 _BAD_CODE = re.compile(r"invalid code|did not match|expired|login failed|please try again", re.I)
 START_TIMEOUT = 30.0   # seconds to wait for the URL to appear
-FINISH_TIMEOUT = 45.0  # seconds to wait for the CLI to exchange the code
+FINISH_TIMEOUT = 90.0  # seconds to wait for the CLI to exchange the code
 SESSION_TTL = 600.0    # a pending login may stay open this long
 
 
@@ -197,15 +197,20 @@ def submit(session_id: str, code: str) -> dict:
     _drop(session_id)
     _kill(sess)
 
-    if not exited:
-        return {"ok": False, "error": "timed out waiting for the CLI to accept the code — start the sign-in again.", "output": output[-600:]}
-
-    # Exited cleanly — confirm credentials actually landed.
+    # Whether the CLI exited on its own or we hit the timeout, the source of
+    # truth is the credentials file: the OAuth exchange often finishes (token
+    # written to disk) a beat after we stop reading, so a "timeout" here does
+    # not mean login failed. Check status the same way a page refresh does
+    # before reporting anything.
     from . import claude_agent
 
     st = claude_agent.check_status()
     if st.authenticated:
         return {"ok": True, "email": st.email, "output": output[-600:]}
+
+    if not exited:
+        return {"ok": False, "error": "timed out waiting for the CLI to accept the code — start the sign-in again.", "output": output[-600:]}
+
     return {
         "ok": False,
         "error": "the CLI exited but still reports logged-out. Output: " + (output[-300:] or "(none)"),

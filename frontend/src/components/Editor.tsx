@@ -28,7 +28,7 @@ export function Editor({ code, onChange, examples, onLoadExample, onLoadDeviceCo
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between border-b border-neutral-800 bg-neutral-900 px-3 py-2 gap-2">
+      <div className="flex flex-wrap items-center justify-between border-b border-neutral-800 bg-neutral-900 px-3 py-2 gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <span className="text-xs text-neutral-500 uppercase tracking-wider">Examples</span>
           <select
@@ -54,13 +54,8 @@ export function Editor({ code, onChange, examples, onLoadExample, onLoadDeviceCo
               </option>
             ))}
           </select>
-          {hiddenCount > 0 && (
-            <span className="text-[10px] text-neutral-500">
-              ({hiddenCount} hidden)
-            </span>
-          )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0 ml-auto">
         {display.device_snippet && (
           <button
             onClick={onLoadDeviceCode}

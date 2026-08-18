@@ -12,12 +12,17 @@ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/PierreGode/Display-
 
 Then open `http://<pi-ip>:8080` from any device on your LAN.
 
+The installer:
+- installs apt deps and Node.js 20
+- clones the repo to `/opt/display-visualizer`
+- builds the frontend
+- installs a systemd unit (`display-visualizer.service`)
+- starts it on port 8080
+
+Change the port with `PORT=9000 sudo -E bash install.sh`, or the install location with `INSTALL_DIR=/srv/wsv sudo -E bash install.sh`.
 
 <img width="1206" height="2162" alt="image" src="https://github.com/user-attachments/assets/b988ac9f-5f97-4836-92ad-c6b2c1eae283" />
 <img width="1206" height="2161" alt="image" src="https://github.com/user-attachments/assets/f1acf723-6efe-465b-8a0f-5c3e6e917f3b" />
-
-
-
 
 ## Features
 
@@ -31,17 +36,6 @@ Then open `http://<pi-ip>:8080` from any device on your LAN.
 - **PIL/Pillow-native** — your code uses the same `Image`, `ImageDraw`, `ImageFont` calls that real Waveshare examples use.
 - **Sandboxed** — user code runs in a subprocess with a wall-clock timeout, isolated from the backend source.
 - **Bring your own photos** — the shipped bezels are synthesised SVGs, but drop a real product photo into `backend/assets/photos/` and it takes over automatically.
-
-
-
-The installer:
-- installs apt deps and Node.js 20
-- clones the repo to `/opt/waveshare-visualizer`
-- builds the frontend
-- installs a systemd unit (`waveshare-visualizer.service`)
-- starts it on port 8080
-
-Change the port with `PORT=9000 sudo -E bash install.sh`, or the install location with `INSTALL_DIR=/srv/wsv sudo -E bash install.sh`.
 
 ## Local development
 
